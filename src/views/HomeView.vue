@@ -8,10 +8,14 @@ const hints = [
   "ลำดับการเปิดกล่องเเละตัวเลขที่ได้มีความสัมพันธ์กัน ลองไปเปิดดูนะ",
   "เฉลยเเล้วนะ รหัสมันคือ 108",
 ];
+const isCLick = ref<number[]>([]);
 const indexd = ref(0);
 const showDialog = ref(false);
 const toggleDialog = (idx: number) => {
   indexd.value = idx;
+  if (!isCLick.value.includes(idx + 1)) {
+    isCLick.value.push(idx + 1);
+  }
   showDialog.value = !showDialog.value;
 };
 </script>
@@ -84,8 +88,21 @@ const toggleDialog = (idx: number) => {
 
     <section class="bg-white shadow-md rounded-lg p-6 mb-6">
       <h1 class="text-xl text-black font-bold">คำใบ้เพิ่มเติม หากต้องการ</h1>
+      <div
+        v-if="hints.filter((_, idx) => isCLick.includes(idx)).length == 0"
+        class="my-4"
+      >
+        <button
+          @click="isCLick.push(0)"
+          class="w-full px-6 py-3 bg-blue-500 text-white rounded shadow-md hover:bg-blue-700 transition"
+        >
+          เริ่มขอคำใบ้
+        </button>
+      </div>
       <div class="text-center my-4 flex flex-col w-full gap-2">
-        <div v-for="(_, index) in hints">
+        <div
+          v-for="(_, index) in hints.filter((_, idx) => isCLick.includes(idx))"
+        >
           <button
             @click="toggleDialog(index)"
             class="w-full px-6 py-3 bg-blue-500 text-white rounded shadow-md hover:bg-blue-700 transition"
